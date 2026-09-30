@@ -1,7 +1,7 @@
 /* ──────────────────────────────────────────
-   No3 Hangout — Interactive JavaScript v2
+   No3 Hangout — Interactive JavaScript v3
    Features: Cart · Search · Filters · Sort ·
-   Favourites · Mobile Nav · Back-to-top ·
+   Favourites · Bottom Nav · Back-to-top ·
    Trending chips · Combo deals · Animations
    ────────────────────────────────────────── */
 
@@ -21,7 +21,6 @@ const cartBtn       = $('cart-btn');
 const cartClose     = $('cart-close');
 const cartSidebar   = $('cart-sidebar');
 const cartOverlay   = $('cart-overlay');
-const cartCountEl   = $('cart-count');
 const cartItemsEl   = $('cart-items');
 const cartFooterEl  = $('cart-footer');
 const cartEmptyEl   = $('cart-empty');
@@ -43,9 +42,15 @@ const searchNoticeText = $('search-notice-text');
 const clearSearchBtn = $('clear-search-btn');
 const sortSelect    = $('sort-select');
 const backToTop     = $('back-to-top');
-const hamburger     = $('hamburger');
-const mobileNav     = $('mobile-nav');
 const browseMenuBtn = $('browse-menu-btn');
+const siteHeader    = $('site-header');
+const filterBar     = $('filter-bar');
+const filterBtn     = $('filter-btn');
+const menuEmpty     = $('menu-empty');
+const headerFavBtn  = $('header-fav-btn');
+const bottomNav     = $('bottom-nav');
+const cartCountEls  = document.querySelectorAll('.cart-count');
+const originalOrder = Array.from(document.querySelectorAll('.menu-card'));
 
 /* ═══════ PROMO BANNER CLOSE ═══════ */
 closeBanner.addEventListener('click', () => {
@@ -59,22 +64,13 @@ closeBanner.addEventListener('click', () => {
   });
 });
 
-/* ═══════ MOBILE HAMBURGER ═══════ */
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', String(isOpen));
-  mobileNav.classList.toggle('open', isOpen);
-  mobileNav.setAttribute('aria-hidden', String(!isOpen));
-});
-// Close on nav link click
-document.querySelectorAll('.mobile-nav-link').forEach(link => {
-  link.addEventListener('click', () => {
-    hamburger.classList.remove('open');
-    mobileNav.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    mobileNav.setAttribute('aria-hidden', 'true');
-  });
-});
+/* ═══════ SCROLL HELPERS ═══════ */
+function scrollToEl(el) {
+  if (!el) return;
+  const offset = siteHeader.offsetHeight + 8;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
+}
+filterBtn.addEventListener('click', () => scrollToEl(filterBar));
 
 /* ═══════ CART OPEN / CLOSE ═══════ */
 function openCart() {
@@ -144,10 +140,15 @@ function renderCart() {
       : 'Add items to get started';
   }
 
-  // Cart badge
-  cartCountEl.textContent = totalQty;
-  cartCountEl.classList.add('bump');
-  setTimeout(() => cartCountEl.classList.remove('bump'), 400);
+  // Cart badges (header + bottom nav)
+  cartCountEls.forEach(el => {
+    el.textContent = totalQty;
+    el.classList.toggle('empty', totalQty === 0);
+    if (totalQty > 0) {
+      el.classList.add('bump');
+      setTimeout(() => el.classList.remove('bump'), 300);
+    }
+  });
 }
 
 /* ═══════ ADD TO CART ═══════ */
@@ -183,11 +184,12 @@ document.querySelectorAll('.add-btn').forEach(btn => {
     const price = btn.dataset.price;
     addToCart(name, price, id);
 
-    // Animate button
-    const origHTML = btn.innerHTML;
+    // Animate button (keep original markup so repeat clicks restore correctly)
+    if (!btn.dataset.orig) btn.dataset.orig = btn.innerHTML;
+    clearTimeout(btn._addedTimer);
     btn.classList.add('added');
-    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Added!`;
-    setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = origHTML; }, 1500);
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span class="add-label">Added</span>`;
+    btn._addedTimer = setTimeout(() => { btn.classList.remove('added'); btn.innerHTML = btn.dataset.orig; }, 1500);
   });
 });
 
@@ -198,10 +200,11 @@ document.querySelectorAll('.combo-add').forEach(btn => {
     const name  = btn.dataset.name;
     const price = btn.dataset.price;
     addToCart(name, price, id);
-    const orig = btn.textContent;
+    if (!btn.dataset.orig) btn.dataset.orig = btn.textContent;
+    clearTimeout(btn._addedTimer);
     btn.classList.add('added');
     btn.textContent = '✓ Added';
-    setTimeout(() => { btn.classList.remove('added'); btn.textContent = orig; }, 1500);
+    btn._addedTimer = setTimeout(() => { btn.classList.remove('added'); btn.textContent = btn.dataset.orig; }, 1500);
   });
 });
 
@@ -226,8 +229,26 @@ document.querySelectorAll('.card-fav').forEach(btn => {
       btn.classList.add('active');
       showToast('Added to favourites ❤️');
     }
+    if (state.activeFilter === 'fav') applyFilters();
   });
 });
+
+/* Show saved items (header heart + bottom nav) */
+function setFilter(filter) {
+  state.activeFilter = filter;
+  document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.filter === filter));
+  headerFavBtn.classList.toggle('active', filter === 'fav');
+  applyFilters();
+}
+function toggleSaved() {
+  const next = state.activeFilter === 'fav' ? 'all' : 'fav';
+  setFilter(next);
+  if (next === 'fav') {
+    if (!state.favourites.size) showToast('Tap ♡ on any item to save it');
+    scrollToEl(filterBar);
+  }
+}
+headerFavBtn.addEventListener('click', toggleSaved);
 
 /* ═══════ CATEGORY FILTER ═══════ */
 categoryList.addEventListener('click', e => {
@@ -241,12 +262,7 @@ categoryList.addEventListener('click', e => {
 
 /* ═══════ PILL FILTER ═══════ */
 document.querySelectorAll('.pill').forEach(pill => {
-  pill.addEventListener('click', () => {
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    pill.classList.add('active');
-    state.activeFilter = pill.dataset.filter;
-    applyFilters();
-  });
+  pill.addEventListener('click', () => setFilter(pill.dataset.filter));
 });
 
 /* ═══════ SORT ═══════ */
@@ -278,6 +294,7 @@ function applyFilters() {
     const cat       = card.dataset.cat;
     const isPopular = card.dataset.popular === 'true';
     const isNew     = card.dataset.new === 'true';
+    const isFav     = state.favourites.has(card.querySelector('.card-fav')?.dataset.id);
     const hasOffer  = !!card.querySelector('.offer-badge');
     const name      = (card.querySelector('.card-name')?.textContent || '').toLowerCase();
     const desc      = (card.querySelector('.card-desc')?.textContent || '').toLowerCase();
@@ -288,6 +305,7 @@ function applyFilters() {
       : state.activeFilter === 'popular' ? isPopular
       : state.activeFilter === 'new'     ? isNew
       : state.activeFilter === 'offer'   ? hasOffer
+      : state.activeFilter === 'fav'     ? isFav
       : true;
     const searchMatch = !state.searchQuery
       ? true
@@ -311,10 +329,13 @@ function applyFilters() {
     }
   });
 
-  // Re-order DOM by sorting visible cards (optional visual sort)
+  // Re-order DOM (restore original order for "default")
   if (state.sortMode !== 'default') {
     visible.forEach(card => menuGrid.appendChild(card));
+  } else {
+    originalOrder.forEach(card => menuGrid.appendChild(card));
   }
+  menuEmpty.hidden = visible.length > 0;
 
   // Update count
   itemCountEl.textContent = visible.length + (visible.length === 1 ? ' item' : ' items');
@@ -336,17 +357,44 @@ document.querySelectorAll('.trend-chip').forEach(chip => {
     chip.classList.add('active');
     // Add to cart
     addToCart(chip.dataset.add, chip.dataset.price, chip.dataset.id);
-    // Scroll to menu
-    document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Scroll to the item's card
+    scrollToEl(document.getElementById(chip.dataset.id) || document.getElementById('menu'));
   });
 });
 
 /* ═══════ SCROLL BEHAVIORS ═══════ */
 window.addEventListener('scroll', () => {
   const y = window.scrollY;
-  // Back to top
   backToTop.classList.toggle('visible', y > 400);
+  siteHeader.classList.toggle('scrolled', y > 8);
 }, { passive: true });
+
+/* ═══════ BOTTOM NAV (mobile) ═══════ */
+function setBottomNav(key) {
+  bottomNav.querySelectorAll('.bn-item').forEach(b => b.classList.toggle('active', b.dataset.bn === key));
+}
+bottomNav.addEventListener('click', e => {
+  const item = e.target.closest('.bn-item');
+  if (!item) return;
+  const key = item.dataset.bn;
+  if (key === 'cart') { e.preventDefault(); openCart(); return; }
+  if (key === 'fav')  { toggleSaved(); setBottomNav(state.activeFilter === 'fav' ? 'fav' : 'home'); return; }
+  if (key === 'home') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  if (key === 'deals') { e.preventDefault(); scrollToEl(document.getElementById('combos')); }
+  setBottomNav(key);
+});
+
+/* Highlight nav items for the section in view */
+const navLinks = document.querySelectorAll('.nav-link');
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const id = entry.target.id;
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    if (state.activeFilter !== 'fav') setBottomNav(id === 'combos' ? 'deals' : 'home');
+  });
+}, { rootMargin: '-45% 0px -50% 0px' });
+['menu', 'combos', 'about'].forEach(id => { const el = $(id); if (el) sectionObserver.observe(el); });
 
 backToTop.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -358,8 +406,8 @@ const observer = new IntersectionObserver((entries) => {
     if (entry.isIntersecting) {
       const idx = Array.from(menuGrid.querySelectorAll('.menu-card')).indexOf(entry.target);
       setTimeout(() => {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+        entry.target.style.opacity = '';
+        entry.target.style.transform = ''; // hand back to CSS so :hover lift works
       }, idx * 70);
       observer.unobserve(entry.target);
     }
@@ -369,7 +417,7 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.menu-card').forEach(card => {
   card.style.opacity = '0';
   card.style.transform = 'translateY(28px)';
-  card.style.transition = 'opacity 0.42s ease, transform 0.42s ease, box-shadow 0.28s, border-color 0.2s';
+  card.style.transition = 'opacity 0.42s ease, transform 0.42s ease, box-shadow 0.3s, border-color 0.2s';
   observer.observe(card);
 });
 
@@ -380,4 +428,4 @@ document.addEventListener('keydown', e => {
 
 /* ═══════ INIT ═══════ */
 renderCart();
-console.log('%c🍔 No3 Hangout v2 ', 'background:#1a3fa8;color:#FFD600;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
+console.log('%c🍔 No3 Hangout v3 ', 'background:#1a3fa8;color:#FFD600;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
