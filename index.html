@@ -44,7 +44,7 @@
 
       <div class="header-search" id="header-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="search" id="search-input" placeholder="Search for food…" aria-label="Search menu" />
+        <input type="search" id="search-input" placeholder="Search for food…" aria-label="Search menu" aria-haspopup="dialog" readonly />
         <button class="search-clear" id="search-clear" aria-label="Clear search" style="display:none">✕</button>
       </div>
 
@@ -55,6 +55,17 @@
       </nav>
 
       <div class="header-actions">
+        <div class="notif-wrap">
+          <button class="icon-btn notif-btn" id="notif-btn" aria-label="Notifications" aria-expanded="false" aria-controls="notif-panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg><span class="notif-dot" id="notif-dot"></span></button>
+          <div class="notif-panel" id="notif-panel" role="region" aria-label="Notifications" hidden>
+            <div class="notif-head"><h3>Notifications</h3><span>3 new</span></div>
+            <ul class="notif-list">
+              <li><span class="notif-ic notif-ic--yellow">%</span><div><strong>10% off your first order</strong><span>Use code NO3FIRST at checkout</span></div></li>
+              <li><span class="notif-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></span><div><strong>Combo deals from ₹499</strong><span>Burger, fries &amp; a drink — save up to 25%</span></div></li>
+              <li><span class="notif-ic notif-ic--green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><div><strong>Free delivery unlocked</strong><span>On every order above ₹199 with NO3FREE</span></div></li>
+            </ul>
+          </div>
+        </div>
         <button class="icon-btn header-fav" id="header-fav-btn" aria-label="Show favourites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
         <button class="icon-btn cart-btn" id="cart-btn" aria-label="View cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
@@ -78,12 +89,11 @@
         </div>
 
         <h1 class="hero-title">Hungry? <span>Order &amp; Eat</span></h1>
-        <p class="hero-tagline">Bold flavours. Zero apologies. Smash burgers, wings and more — hot at your door in about 15 minutes.</p>
 
         <div class="hero-search">
           <label class="search-pill">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="search" id="mobile-search-input" placeholder="Search for foods…" aria-label="Search menu" />
+            <input type="search" id="mobile-search-input" placeholder="Search for foods…" aria-label="Search menu" aria-haspopup="dialog" readonly />
           </label>
           <button class="filter-fab" id="filter-btn" aria-label="Jump to filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="9" cy="8" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/></svg></button>
         </div>
@@ -92,35 +102,30 @@
           <a href="#menu" class="btn btn-primary" id="order-now-btn">Order now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a>
           <a href="#combos" class="btn btn-ghost">See deals</a>
         </div>
-
-        <ul class="hero-stats" aria-label="Highlights">
-          <li><strong>4.8</strong><span>Rating</span></li>
-          <li><strong>12K+</strong><span>Orders</span></li>
-          <li><strong>15<small>min</small></strong><span>Avg prep</span></li>
-          <li><strong>Free</strong><span>Delivery</span></li>
-        </ul>
       </div>
 
-      <div class="hero-visual" aria-hidden="true">
-        <div class="hero-img-card">
+      <div class="hero-visual">
+        <div class="hero-img-card" aria-hidden="true">
           <img src="burger.png" alt="" class="hero-img" />
           <span class="hero-live"><span class="live-dot"></span>Open · 10AM – 10PM</span>
         </div>
-        <div class="float-card float-card--left">
+        <button class="float-card float-card--left" data-open="card-pizza" aria-label="View Pepperoni Slice">
           <img src="pizza.png" alt="" />
-          <div>
+          <span class="fc-text">
             <span class="fc-name">Pepperoni Slice</span>
             <span class="fc-price"><small>₹</small>279</span>
-          </div>
-        </div>
-        <div class="float-card float-card--right">
+          </span>
+          <span class="fc-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <button class="float-card float-card--right" data-open="card-wings" aria-label="View Buffalo Wings">
           <img src="wings.png" alt="" />
-          <div>
+          <span class="fc-text">
             <span class="fc-name">Buffalo Wings</span>
             <span class="fc-price"><small>₹</small>329</span>
-          </div>
-        </div>
-        <div class="float-pin"><span>15</span><small>min</small></div>
+          </span>
+          <span class="fc-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+        </button>
+        <div class="float-pin" aria-hidden="true"><span>15</span><small>min</small></div>
       </div>
     </section>
 
@@ -246,7 +251,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-popular">Popular</span><span class="tag tag-pick">Chef&#x27;s Pick</span></div>
-          <h3 class="card-name">Double Smash Burger</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Double Smash Burger</button></h3>
           <p class="card-desc">Two smashed beef patties, American cheese, pickles, caramelized onions &amp; secret sauce</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.9</span><span class="rating-count">(312)</span></span>
@@ -269,7 +274,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-offer">Offer</span></div>
-          <h3 class="card-name">Classic Fries</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Classic Fries</button></h3>
           <p class="card-desc">Crispy golden fries, lightly salted with your choice of dipping sauce — ranch, ketchup, or chipotle</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.7</span><span class="rating-count">(201)</span></span>
@@ -292,7 +297,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-new">New</span></div>
-          <h3 class="card-name">Buffalo Hotdog</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Buffalo Hotdog</button></h3>
           <p class="card-desc">All-beef dog on brioche bun with buffalo sauce, blue cheese drizzle &amp; pickled jalapeños</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.5</span><span class="rating-count">(89)</span></span>
@@ -315,7 +320,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-popular">Popular</span></div>
-          <h3 class="card-name">Pepperoni Slice</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Pepperoni Slice</button></h3>
           <p class="card-desc">Thick-cut pepperoni on a hand-tossed base with San Marzano tomato sauce and fresh mozzarella</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.8</span><span class="rating-count">(176)</span></span>
@@ -338,7 +343,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-new">New</span><span class="tag tag-popular">Popular</span></div>
-          <h3 class="card-name">Buffalo Wings (6 pcs)</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Buffalo Wings (6 pcs)</button></h3>
           <p class="card-desc">Crispy double-fried wings tossed in our signature buffalo sauce. Served with celery &amp; ranch dip</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.9</span><span class="rating-count">(254)</span></span>
@@ -361,7 +366,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-offer">Offer</span></div>
-          <h3 class="card-name">Classic Milkshake</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Classic Milkshake</button></h3>
           <p class="card-desc">Thick, creamy milkshake in chocolate, vanilla or strawberry. Topped with whipped cream &amp; a cherry</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.6</span><span class="rating-count">(143)</span></span>
@@ -384,7 +389,7 @@
         </div>
         <div class="card-body">
           <div class="card-tags"><span class="tag tag-new">New</span><span class="tag tag-dessert">Dessert</span></div>
-          <h3 class="card-name">Chocolate Lava Cake</h3>
+          <h3 class="card-name"><button class="card-open" aria-haspopup="dialog">Chocolate Lava Cake</button></h3>
           <p class="card-desc">Warm molten chocolate cake with a gooey centre, served with a scoop of vanilla ice cream</p>
           <div class="card-meta">
             <span class="card-rating"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.8 5.7 6.3.9-4.55 4.43 1.07 6.27L12 17.13 6.38 20.1l1.07-6.27L2.9 9.4l6.3-.9z"/></svg><span class="rating-val">4.8</span><span class="rating-count">(97)</span></span>
@@ -558,6 +563,7 @@
 
   <!-- ══ CART SIDEBAR ══ -->
   <aside class="cart-sidebar" id="cart-sidebar" aria-label="Shopping cart" aria-hidden="true">
+    <span class="sheet-handle" aria-hidden="true"></span>
     <div class="cart-header">
       <div>
         <h2>Your order</h2>
@@ -565,7 +571,7 @@
       </div>
       <button class="icon-btn cart-close" id="cart-close" aria-label="Close cart">✕</button>
     </div>
-    <div class="cart-items" id="cart-items">
+    <div class="cart-items" id="cart-items" data-lenis-prevent>
       <div class="cart-empty" id="cart-empty">
         <span class="cart-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span>
         <p>Nothing here yet.<br/><span>Add something delicious!</span></p>
@@ -573,13 +579,99 @@
       </div>
     </div>
     <div class="cart-footer" id="cart-footer" style="display:none">
-      <div class="cart-total-row"><span>Subtotal</span><span class="cart-total" id="cart-total">₹0</span></div>
-      <div class="cart-total-row"><span>Delivery</span><span class="delivery-fee">Free</span></div>
-      <div class="cart-total-row grand"><span>Total</span><span class="cart-total" id="cart-grand-total">₹0</span></div>
-      <button class="btn btn-primary checkout-btn" id="checkout-btn">Checkout <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></button>
+      <div class="cart-summary">
+        <div class="cs-row"><span>Subtotal</span><span class="cart-total" id="cart-total">₹0</span></div>
+        <div class="cs-row"><span>Delivery amount</span><span class="delivery-fee">Free</span></div>
+        <div class="cs-total">
+          <span class="cs-label">Total amount</span>
+          <span class="cs-amount" id="cart-grand-total">₹0</span>
+        </div>
+        <img class="cs-img" src="fries.png" alt="" aria-hidden="true" />
+      </div>
+      <button class="pay-btn" id="checkout-btn">
+        <span class="pay-label">Make payment</span>
+        <span class="pay-knob" aria-hidden="true"><span class="pay-chevrons"><svg viewBox="0 0 36 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 6 12 12 6 18"/><polyline points="15 6 21 12 15 18"/><polyline points="24 6 30 12 24 18"/></svg></span><span class="pay-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></span>
+      </button>
     </div>
   </aside>
   <div class="cart-overlay" id="cart-overlay"></div>
+
+  <!-- ══ PRODUCT SHEET (order control) ══ -->
+  <div class="ps-overlay" id="ps-overlay"></div>
+  <section class="product-sheet" id="product-sheet" role="dialog" aria-modal="true" aria-labelledby="ps-title" aria-hidden="true" data-lenis-prevent>
+    <div class="ps-top">
+      <div class="ps-bar">
+        <button class="icon-btn ps-back" id="ps-back" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
+        <h2 class="ps-title" id="ps-title"></h2>
+        <button class="icon-btn ps-info-btn" id="ps-info-btn" aria-label="Item details" aria-expanded="false" aria-controls="ps-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg></button>
+      </div>
+      <dl class="ps-info" id="ps-info" hidden>
+        <div><dt>Rating</dt><dd id="ps-info-rating"></dd></div>
+        <div><dt>Prep time</dt><dd id="ps-info-time"></dd></div>
+        <div><dt>Energy</dt><dd id="ps-info-kcal"></dd></div>
+      </dl>
+      <div class="ps-stage">
+        <div class="ps-img-wrap"><img class="ps-img" id="ps-img" src="burger.png" alt="" /></div>
+        <div class="ps-control">
+          <button class="ps-step ps-step--minus" id="ps-minus" aria-label="Decrease quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+          <span class="ps-qty" id="ps-qty" aria-live="polite">01</span>
+          <button class="ps-step ps-step--plus" id="ps-plus" aria-label="Increase quantity"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+        </div>
+        <span class="ps-price" id="ps-price">₹0.00</span>
+      </div>
+    </div>
+    <div class="ps-body">
+      <span class="sheet-handle" aria-hidden="true"></span>
+      <div class="ps-name-row">
+        <h3 class="ps-name" id="ps-name"></h3>
+        <button class="icon-btn ps-fav" id="ps-fav" aria-label="Add to favourites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="ps-tags" id="ps-tags"></div>
+      <p class="ps-desc" id="ps-desc"></p>
+      <button class="ps-more" id="ps-more" aria-expanded="false">Read more</button>
+      <button class="ps-add" id="ps-add">
+        <span class="ps-add-label" id="ps-add-label">Add to cart</span>
+        <span class="ps-add-knob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18l-2 9a2 2 0 0 1-2 1.6H7A2 2 0 0 1 5 19z"/><path d="M8 10l3-6M16 10l-3-6"/><line x1="9" y1="14" x2="9" y2="17"/><line x1="15" y1="14" x2="15" y2="17"/></svg></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ══ SEARCH OVERLAY (smart search) ══ -->
+  <div class="search-overlay" id="search-overlay" aria-hidden="true">
+    <div class="so-panel" role="dialog" aria-modal="true" aria-label="Search the menu" data-lenis-prevent>
+      <div class="so-bar">
+        <button class="icon-btn so-back" id="so-back" aria-label="Close search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
+        <form class="search-pill so-pill" id="so-form" role="search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="search" id="so-input" placeholder="Search for foods…" aria-label="Search for foods" autocomplete="off" enterkeyhint="search" />
+          <button type="button" class="search-clear" id="so-clear" aria-label="Clear search" hidden>✕</button>
+        </form>
+      </div>
+
+      <div class="so-section" id="so-recent-wrap" hidden>
+        <div class="so-head"><h3>Recent searches</h3><button class="so-link" id="so-recent-clear">Clear all</button></div>
+        <div class="so-chips" id="so-recent"></div>
+      </div>
+
+      <div class="so-section" id="so-popular-wrap">
+        <div class="so-head"><h3>Popular right now</h3></div>
+        <div class="so-chips">
+          <button class="so-chip" data-q="Smash burger"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Smash burger</button>
+          <button class="so-chip" data-q="Wings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Wings</button>
+          <button class="so-chip" data-q="Pizza"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Pizza</button>
+          <button class="so-chip" data-q="Fries"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Fries</button>
+          <button class="so-chip" data-q="Milkshake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Milkshake</button>
+          <button class="so-chip" data-q="Lava cake"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg>Lava cake</button>
+        </div>
+      </div>
+
+      <div class="so-section" id="so-results-wrap" hidden>
+        <div class="so-head"><h3 id="so-results-title">Results</h3><button class="so-link" id="so-see-all">Show in menu</button></div>
+        <ul class="so-results" id="so-results"></ul>
+        <p class="so-none" id="so-none" hidden>No dishes match that. Try “burger” or “wings”.</p>
+      </div>
+    </div>
+  </div>
 
   <!-- ══ BACK TO TOP ══ -->
   <button class="back-to-top icon-btn" id="back-to-top" aria-label="Back to top" title="Back to top">↑</button>
