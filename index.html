@@ -37,9 +37,12 @@
   <!-- ══ HEADER ══ -->
   <header class="site-header" id="site-header">
     <div class="header-inner container">
-      <a href="#top" class="logo-wrap" aria-label="No3 Hangout home">
-        <span class="logo-mark">3</span>
-        <span class="logo-text">No3 <span>Hangout</span></span>
+      <a href="#top" class="greet" aria-label="No3 Hangout — back to top">
+        <span class="greet-avatar"><svg viewBox="0 0 48 48" fill="currentColor"><circle cx="24" cy="18" r="8.5"/><path d="M8 44c0-9 7.2-15 16-15s16 6 16 15z"/></svg></span>
+        <span class="greet-text">
+          <span class="greet-hi">Hi there</span>
+          <span class="greet-addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>No. 3, Main Street, Kochi · Delivering now</span>
+        </span>
       </a>
 
       <div class="header-search" id="header-search">
@@ -66,7 +69,6 @@
             </ul>
           </div>
         </div>
-        <button class="icon-btn header-fav" id="header-fav-btn" aria-label="Show favourites"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
         <button class="icon-btn cart-btn" id="cart-btn" aria-label="View cart">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
           <span class="cart-count" id="cart-count">0</span>
@@ -80,14 +82,6 @@
     <!-- ══ HERO ══ -->
     <section class="hero container" aria-label="Welcome">
       <div class="hero-content">
-        <div class="hero-greet">
-          <span class="greet-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
-          <div>
-            <span class="greet-hi">Hi there, welcome back</span>
-            <span class="greet-addr">No. 3, Main Street · Delivering now</span>
-          </div>
-        </div>
-
         <h1 class="hero-title">Hungry? <span>Order &amp; Eat</span></h1>
 
         <div class="hero-search">
@@ -96,11 +90,6 @@
             <input type="search" id="mobile-search-input" placeholder="Search for foods…" aria-label="Search menu" aria-haspopup="dialog" readonly />
           </label>
           <button class="filter-fab" id="filter-btn" aria-label="Jump to filters"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="16" x2="20" y2="16"/><circle cx="9" cy="8" r="2.4" fill="currentColor"/><circle cx="15" cy="16" r="2.4" fill="currentColor"/></svg></button>
-        </div>
-
-        <div class="hero-cta-row">
-          <a href="#menu" class="btn btn-primary" id="order-now-btn">Order now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></a>
-          <a href="#combos" class="btn btn-ghost">See deals</a>
         </div>
       </div>
 
@@ -126,6 +115,46 @@
           <span class="fc-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
         </button>
         <div class="float-pin" aria-hidden="true"><span>15</span><small>min</small></div>
+      </div>
+    </section>
+
+    <!-- ══ CATEGORIES — arc carousel ══ -->
+    <section class="categories-section" aria-label="Food categories">
+      <div class="categories-arc">
+        <div class="categories-scroll" role="list" id="category-list">
+        <button class="cat-item" data-cat="desserts" role="listitem" aria-label="Desserts" aria-pressed="false">
+          <span class="cat-thumb"><img src="dessert.png" alt="" /></span>
+          <span class="cat-label">Desserts</span>
+        </button>
+        <button class="cat-item" data-cat="fries" role="listitem" aria-label="Fries" aria-pressed="false">
+          <span class="cat-thumb"><img src="fries.png" alt="" /></span>
+          <span class="cat-label">Fries</span>
+        </button>
+        <button class="cat-item" data-cat="drinks" role="listitem" aria-label="Drinks" aria-pressed="false">
+          <span class="cat-thumb"><img src="drinks.png" alt="" /></span>
+          <span class="cat-label">Drinks</span>
+        </button>
+        <button class="cat-item active" data-cat="all" role="listitem" aria-label="All" aria-pressed="true">
+          <span class="cat-thumb"><img src="combo.png" alt="" /></span>
+          <span class="cat-label">All</span>
+        </button>
+        <button class="cat-item" data-cat="burgers" role="listitem" aria-label="Burgers" aria-pressed="false">
+          <span class="cat-thumb"><img src="burger.png" alt="" /></span>
+          <span class="cat-label">Burgers</span>
+        </button>
+        <button class="cat-item" data-cat="pizza" role="listitem" aria-label="Pizza" aria-pressed="false">
+          <span class="cat-thumb"><img src="pizza.png" alt="" /></span>
+          <span class="cat-label">Pizza</span>
+        </button>
+        <button class="cat-item" data-cat="wings" role="listitem" aria-label="Wings" aria-pressed="false">
+          <span class="cat-thumb"><img src="wings.png" alt="" /></span>
+          <span class="cat-label">Wings</span>
+        </button>
+        <button class="cat-item" data-cat="hotdogs" role="listitem" aria-label="Hotdogs" aria-pressed="false">
+          <span class="cat-thumb"><img src="hotdog.png" alt="" /></span>
+          <span class="cat-label">Hotdogs</span>
+        </button>
+        </div>
       </div>
     </section>
 
@@ -157,53 +186,8 @@
       </div>
     </section>
 
-    <!-- ══ CATEGORIES ══ -->
-    <section class="categories-section" id="menu" aria-label="Food categories">
-      <div class="container">
-    <div class="section-head">
-      <span class="section-num"><span>0</span>1</span>
-      <h2 class="section-title">What's on your mind?</h2>
-      
-    </div></div>
-      <div class="categories-arc">
-        <div class="categories-scroll container" role="list" id="category-list">
-        <button class="cat-item active" data-cat="all" role="listitem" aria-label="All">
-          <span class="cat-thumb"><span class="cat-all">All</span></span>
-          <span class="cat-label">All</span>
-        </button>
-        <button class="cat-item" data-cat="burgers" role="listitem" aria-label="Burgers">
-          <span class="cat-thumb"><img src="burger.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Burgers</span>
-        </button>
-        <button class="cat-item" data-cat="fries" role="listitem" aria-label="Fries">
-          <span class="cat-thumb"><img src="fries.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Fries</span>
-        </button>
-        <button class="cat-item" data-cat="hotdogs" role="listitem" aria-label="Hotdogs">
-          <span class="cat-thumb"><img src="hotdog.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Hotdogs</span>
-        </button>
-        <button class="cat-item" data-cat="pizza" role="listitem" aria-label="Pizza">
-          <span class="cat-thumb"><img src="pizza.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Pizza</span>
-        </button>
-        <button class="cat-item" data-cat="wings" role="listitem" aria-label="Wings">
-          <span class="cat-thumb"><img src="wings.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Wings</span>
-        </button>
-        <button class="cat-item" data-cat="drinks" role="listitem" aria-label="Drinks">
-          <span class="cat-thumb"><img src="drinks.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Drinks</span>
-        </button>
-        <button class="cat-item" data-cat="desserts" role="listitem" aria-label="Desserts">
-          <span class="cat-thumb"><img src="dessert.png" alt="" loading="lazy" /></span>
-          <span class="cat-label">Desserts</span>
-        </button>
-        </div>
-      </div>
-    </section>
-
     <!-- ══ STICKY FILTER BAR ══ -->
+    <div id="menu" class="menu-anchor" aria-hidden="true"></div>
     <div class="filter-bar" id="filter-bar" role="toolbar" aria-label="Filter and sort menu">
       <div class="filter-bar-inner container">
         <div class="filter-pills" role="group" aria-label="Filter pills">
@@ -416,7 +400,7 @@
     <section class="combos-section container" id="combos" aria-label="Combo deals">
       
     <div class="section-head">
-      <span class="section-num"><span>0</span>2</span>
+      <span class="section-num"><span>0</span>1</span>
       <h2 class="section-title">Combo deals</h2>
       
     </div>
@@ -488,7 +472,7 @@
     <section class="about-section container" id="about" aria-label="About No3 Hangout">
       
     <div class="section-head">
-      <span class="section-num"><span>0</span>3</span>
+      <span class="section-num"><span>0</span>2</span>
       <h2 class="section-title">Our story</h2>
       
     </div>
@@ -571,12 +555,14 @@
       </div>
       <button class="icon-btn cart-close" id="cart-close" aria-label="Close cart">✕</button>
     </div>
-    <div class="cart-items" id="cart-items" data-lenis-prevent>
+    <div class="cart-scroll" id="cart-scroll">
+    <div class="cart-items" id="cart-items">
       <div class="cart-empty" id="cart-empty">
         <span class="cart-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg></span>
         <p>Nothing here yet.<br/><span>Add something delicious!</span></p>
         <a href="#menu" class="btn btn-primary" id="browse-menu-btn">Browse menu</a>
       </div>
+    </div>
     </div>
     <div class="cart-footer" id="cart-footer" style="display:none">
       <div class="cart-summary">
@@ -598,7 +584,8 @@
 
   <!-- ══ PRODUCT SHEET (order control) ══ -->
   <div class="ps-overlay" id="ps-overlay"></div>
-  <section class="product-sheet" id="product-sheet" role="dialog" aria-modal="true" aria-labelledby="ps-title" aria-hidden="true" data-lenis-prevent>
+  <section class="product-sheet" id="product-sheet" role="dialog" aria-modal="true" aria-labelledby="ps-title" aria-hidden="true">
+    <div class="ps-content" id="ps-content">
     <div class="ps-top">
       <div class="ps-bar">
         <button class="icon-btn ps-back" id="ps-back" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>
@@ -633,6 +620,7 @@
         <span class="ps-add-label" id="ps-add-label">Add to cart</span>
         <span class="ps-add-knob" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h18l-2 9a2 2 0 0 1-2 1.6H7A2 2 0 0 1 5 19z"/><path d="M8 10l3-6M16 10l-3-6"/><line x1="9" y1="14" x2="9" y2="17"/><line x1="15" y1="14" x2="15" y2="17"/></svg></span>
       </button>
+    </div>
     </div>
   </section>
 
