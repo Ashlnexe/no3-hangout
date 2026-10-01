@@ -1,8 +1,9 @@
 /* ──────────────────────────────────────────
-   No3 Hangout — Interactive JavaScript v3.1
+   No3 Hangout — Interactive JavaScript v3.2
    Features: Cart · Checkout · Product sheet ·
    Smart search · Filters · Sort · Favourites ·
    Notifications · Bottom Nav · Back-to-top ·
+   Lenis in sheets · Category arc ·
    Trending chips · Combo deals · Animations
    ────────────────────────────────────────── */
 
@@ -81,6 +82,32 @@ function cardData(card) {
   };
 }
 
+// Smooth (Lenis) scrolling inside the cart list and product sheet. Each gets its
+// own instance bound to the panel; while one handles a wheel event it marks it so
+// the (stopped) page instance ignores it. Touch stays native, like the page.
+const LENIS_OPTS = {
+  duration: 1.2,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true,
+  syncTouch: false,
+  touchMultiplier: 2
+};
+function panelLenis(wrapper, content) {
+  if (typeof Lenis === 'undefined' || !wrapper || !content) return null;
+  try { return new Lenis({ ...LENIS_OPTS, wrapper, content }); } catch { return null; }
+}
+const cartLenis    = panelLenis($('cart-scroll'), $('cart-items'));
+const productLenis = panelLenis($('product-sheet'), $('ps-content'));
+const panelLenises = [cartLenis, productLenis].filter(Boolean);
+if (panelLenises.length) {
+  const tick = time => { panelLenises.forEach(l => l.raf(time)); requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+function resetPanelScroll(instance, el) {
+  if (instance) { instance.resize(); instance.scrollTo(0, { immediate: true, force: true }); }
+  else if (el) el.scrollTop = 0;
+}
+
 // Lock page scroll while a sheet/overlay is open (and pause Lenis if present)
 let scrollLocks = 0;
 function lockScroll() {
@@ -120,11 +147,22 @@ function scrollToEl(el) {
   scrollToY(el.getBoundingClientRect().top + window.scrollY - offset);
 }
 filterBtn.addEventListener('click', () => scrollToEl(filterBar));
+// In-page links (#menu, #combos, …) glide through Lenis when it is running
+document.addEventListener('click', e => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link || !hasLenis() || e.defaultPrevented) return;
+  const hash = link.getAttribute('href');
+  const target = hash === '#top' ? null : document.querySelector(hash);
+  if (hash !== '#top' && !target) return;
+  e.preventDefault();
+  if (target) scrollToEl(target); else scrollToY(0);
+});
 
 /* ═══════ CART OPEN / CLOSE ═══════ */
 function openCart() {
   if (cartSidebar.classList.contains('open')) return;
   closeNotifications();
+  resetPanelScroll(cartLenis, $('cart-scroll'));
   cartSidebar.classList.add('open');
   cartSidebar.setAttribute('aria-hidden', 'false');
   cartOverlay.classList.add('visible');
@@ -296,7 +334,7 @@ document.querySelectorAll('.card-fav').forEach(btn => {
 function setFilter(filter) {
   state.activeFilter = filter;
   document.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.filter === filter));
-  headerFavBtn.classList.toggle('active', filter === 'fav');
+  headerFavBtn?.classList.toggle('active', filter === 'fav');
   applyFilters();
 }
 function toggleSaved() {
@@ -307,7 +345,7 @@ function toggleSaved() {
     scrollToEl(filterBar);
   }
 }
-headerFavBtn.addEventListener('click', toggleSaved);
+headerFavBtn?.addEventListener('click', toggleSaved);
 
 /* ═══════ PRODUCT SHEET — order control ═══════ */
 const productSheet = $('product-sheet');
@@ -387,7 +425,7 @@ function openProduct(card, { edit = false } = {}) {
     psOverlay.classList.add('visible');
     lockScroll();
   }
-  productSheet.scrollTop = 0;
+  resetPanelScroll(productLenis, productSheet);
   closeCart();
   setTimeout(() => psAdd.focus({ preventScroll: true }), 60);
 }
@@ -444,15 +482,45 @@ document.querySelectorAll('.float-card[data-open]').forEach(btn => {
   btn.addEventListener('click', () => openProduct($(btn.dataset.open)));
 });
 
-/* ═══════ CATEGORY FILTER ═══════ */
+/* ═══════ CATEGORY FILTER — arc carousel ═══════ */
+const catItems = Array.from(categoryList.querySelectorAll('.cat-item'));
+const ARC_DEPTH = 34; // px an item drops at the carousel's edge
+
+function centreOn(item, smooth = true) {
+  const left = item.offsetLeft + item.offsetWidth / 2 - categoryList.clientWidth / 2;
+  categoryList.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
+}
+// Items ride a curve: the one in the middle sits highest, neighbours drop away
+let arcFrame = 0;
+function updateArc() {
+  arcFrame = 0;
+  const box = categoryList.getBoundingClientRect();
+  const mid = box.left + box.width / 2;
+  const half = Math.max(box.width / 2, 1);
+  catItems.forEach(item => {
+    const r = item.getBoundingClientRect();
+    const d = Math.min(1.4, Math.abs(r.left + r.width / 2 - mid) / half);
+    item.style.setProperty('--arc', (d * d * ARC_DEPTH).toFixed(1));
+  });
+}
+const queueArc = () => { if (!arcFrame) arcFrame = requestAnimationFrame(updateArc); };
+categoryList.addEventListener('scroll', queueArc, { passive: true });
+window.addEventListener('resize', queueArc);
+
 categoryList.addEventListener('click', e => {
   const btn = e.target.closest('.cat-item');
   if (!btn) return;
-  document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+  catItems.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); });
   btn.classList.add('active');
+  btn.setAttribute('aria-pressed', 'true');
+  centreOn(btn);
   state.activeCategory = btn.dataset.cat;
   applyFilters();
 });
+// Start centred on the active ("All") item
+const activeCat = categoryList.querySelector('.cat-item.active');
+if (activeCat) centreOn(activeCat, false);
+updateArc();
 
 /* ═══════ PILL FILTER ═══════ */
 document.querySelectorAll('.pill').forEach(pill => {
@@ -726,6 +794,15 @@ window.addEventListener('scroll', () => {
   siteHeader.classList.toggle('scrolled', y > 8);
 }, { passive: true });
 
+/* Header search shows up (desktop) once the hero search has scrolled away */
+const heroSearch = document.querySelector('.hero-search');
+if (heroSearch) {
+  new IntersectionObserver(([entry]) => {
+    // out of view *above* the header (not below the fold)
+    siteHeader.classList.toggle('show-search', !entry.isIntersecting && entry.boundingClientRect.top < innerHeight / 2);
+  }, { rootMargin: '-84px 0px 0px 0px' }).observe(heroSearch);
+}
+
 /* ═══════ BOTTOM NAV (mobile) ═══════ */
 function setBottomNav(key) {
   bottomNav.querySelectorAll('.bn-item').forEach(b => b.classList.toggle('active', b.dataset.bn === key));
@@ -746,12 +823,17 @@ const navLinks = document.querySelectorAll('.nav-link');
 const sectionObserver = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (!entry.isIntersecting) return;
-    const id = entry.target.id;
+    const id = entry.target.dataset.navKey;
     navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
     if (state.activeFilter !== 'fav') setBottomNav(id === 'combos' ? 'deals' : 'home');
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
-['menu', 'combos', 'about'].forEach(id => { const el = $(id); if (el) sectionObserver.observe(el); });
+// #menu is a zero-height anchor now, so watch the menu section itself for "Menu"
+[['menu', document.querySelector('.menu-section')], ['combos', $('combos')], ['about', $('about')]].forEach(([key, el]) => {
+  if (!el) return;
+  el.dataset.navKey = key;
+  sectionObserver.observe(el);
+});
 
 backToTop.addEventListener('click', () => scrollToY(0));
 
@@ -787,4 +869,4 @@ document.addEventListener('keydown', e => {
 
 /* ═══════ INIT ═══════ */
 renderCart();
-console.log('%c🍔 No3 Hangout v3.1 ', 'background:#1a3fa8;color:#FFD600;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
+console.log('%c🍔 No3 Hangout v3.2 ', 'background:#1a3fa8;color:#FFD600;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
