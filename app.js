@@ -869,4 +869,4 @@ document.addEventListener('keydown', e => {
 
 /* ═══════ INIT ═══════ */
 renderCart();
-console.log('%c🍔 No3 Hangout v3.2 ', 'background:#1a3fa8;color:#FFD600;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
+console.log('%c🍔 No3 Hangout v3.2 ', 'background:#316DD5;color:#FED321;font-size:1.2rem;font-weight:900;padding:8px 24px;border-radius:8px;letter-spacing:2px;');
