@@ -427,7 +427,7 @@ input[type="search"]::-webkit-search-cancel-button { display: none; }
   transition: transform .25s var(--spring), box-shadow .2s;
 }
 .cat-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-.cat-label { font-size: 1rem; font-weight: 500; color: var(--text-mid); transition: color .2s; }
+.cat-label { font-size: 1rem; font-weight: 500; color: var(--text-mid); transition: color .2s; white-space: nowrap; }
 .cat-item::after {
   content: ''; position: absolute; left: 50%; bottom: 0;
   width: 44px; height: 3px; border-radius: 3px; background: var(--text-dark);
